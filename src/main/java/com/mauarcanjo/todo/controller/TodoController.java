@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,7 +24,7 @@ public class TodoController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<TodoDto> getTodoById(@PathVariable Long id){
+    public ResponseEntity<TodoDto> getTodoById(@PathVariable("id") Long id){
 
         TodoDto todoDto = todoService.getTodoById(id);
         return ResponseEntity.ok(todoDto);
@@ -46,12 +45,26 @@ public class TodoController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteTodo(@PathVariable Long id){
+    public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id){
 
         todoService.deleteTodo(id);
 
         return ResponseEntity.ok("Todo successfuly deleted!");
 
+    }
+
+    @PatchMapping("{id}/complete")
+    public ResponseEntity<TodoDto> completeStatus (@PathVariable("id") Long id){
+
+        TodoDto todoDto = todoService.completeTodo(id);
+        return ResponseEntity.ok(todoDto);
+    }
+
+    @PatchMapping("{id}/incomplete")
+    public ResponseEntity<TodoDto> inCompleteStatus (@PathVariable("id") Long id){
+
+        TodoDto todoDto = todoService.inCompleteTodo(id);
+        return ResponseEntity.ok(todoDto);
     }
 
 }

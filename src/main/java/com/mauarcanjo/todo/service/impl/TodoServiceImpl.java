@@ -2,6 +2,7 @@ package com.mauarcanjo.todo.service.impl;
 
 import com.mauarcanjo.todo.dto.TodoDto;
 import com.mauarcanjo.todo.entity.Todo;
+import com.mauarcanjo.todo.exception.ResourceNotFoundException;
 import com.mauarcanjo.todo.mapper.TodoMapper;
 import com.mauarcanjo.todo.repository.TodoRepository;
 import com.mauarcanjo.todo.service.TodoService;
@@ -56,13 +57,34 @@ public class TodoServiceImpl implements TodoService {
 
     public void deleteTodo(Long id) {
 
+        Todo todo = getTodo(id);
         todoRepository.deleteById(id);
 
     }
 
-    private Todo getTodo (Long todoId) {
-        return todoRepository.findById(todoId)
-                .orElseThrow(() -> new RuntimeException("Todo not found with ID " + todoId));
+    @Transactional
+    public TodoDto completeTodo(Long id) {
+
+        Todo todo = changeCompleteStatus(id, Boolean.TRUE);
+        return TodoMapper.mapToTodoDto(todo);
+    }
+
+    public TodoDto inCompleteTodo(Long id) {
+
+        Todo todo = changeCompleteStatus(id, Boolean.FALSE);
+        return TodoMapper.mapToTodoDto(todo);
+    }
+
+    @Transactional
+    private Todo changeCompleteStatus (Long id, Boolean status){
+        Todo todo = getTodo(id);
+        todo.setCompleted(status);
+        return todo;
+    }
+
+    private Todo getTodo (Long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found with ID " + id));
     }
 
 }
