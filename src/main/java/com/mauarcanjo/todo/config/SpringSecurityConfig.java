@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -25,6 +26,9 @@ public class SpringSecurityConfig {
                     authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.GET, "/api/*").hasAnyRole("ADMIN, USER");
+                    authorize.requestMatchers(HttpMethod.PATCH, "/api/*/complete").hasAnyRole("ADMIN, USER");
+//                    authorize.requestMatchers(HttpMethod.GET, "api/**").permitAll(); // Libera acesso para todos sem autenticacao
                     authorize.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults());

@@ -69,13 +69,13 @@ public class TodoServiceImpl implements TodoService {
         return TodoMapper.mapToTodoDto(todo);
     }
 
+    @Transactional
     public TodoDto inCompleteTodo(Long id) {
 
         Todo todo = changeCompleteStatus(id, Boolean.FALSE);
         return TodoMapper.mapToTodoDto(todo);
     }
 
-    @Transactional
     private Todo changeCompleteStatus (Long id, Boolean status){
         Todo todo = getTodo(id);
         todo.setCompleted(status);
