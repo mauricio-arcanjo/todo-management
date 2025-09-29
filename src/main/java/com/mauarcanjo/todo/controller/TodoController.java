@@ -30,7 +30,7 @@ public class TodoController {
         return ResponseEntity.ok(todoDto);
     }
 
-    @GetMapping("/getall")
+    @GetMapping({"/getall", "/all"})
     public ResponseEntity<List<TodoDto>> getAllTodo(){
 
         List<TodoDto> todos = todoService.getAllTodos();
