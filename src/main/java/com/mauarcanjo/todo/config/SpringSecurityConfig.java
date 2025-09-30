@@ -16,6 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity // so usa para method security
 public class SpringSecurityConfig {
 
     @Bean
@@ -23,11 +24,12 @@ public class SpringSecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->{
-                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.GET, "/api/*").hasAnyRole("ADMIN, USER");
-                    authorize.requestMatchers(HttpMethod.PATCH, "/api/*/complete").hasAnyRole("ADMIN, USER");
+                    //Com @EnableMethodSecurity pode remover essas configuracoes pois todas foram feitas no controller
+//                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+//                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
+//                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+//                    authorize.requestMatchers(HttpMethod.GET, "/api/*").hasAnyRole("ADMIN, USER");
+//                    authorize.requestMatchers(HttpMethod.PATCH, "/api/*/complete").hasAnyRole("ADMIN, USER");
 //                    authorize.requestMatchers(HttpMethod.GET, "api/**").permitAll(); // Libera acesso para todos sem autenticacao
                     authorize.anyRequest().authenticated();
                 })
