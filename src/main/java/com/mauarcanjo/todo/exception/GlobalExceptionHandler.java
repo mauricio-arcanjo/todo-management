@@ -26,6 +26,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TodoAPIException.class)
+    public ResponseEntity<ErrorDetails> handleTodoAPIException(TodoAPIException exception,
+                                                               WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                exception.getMessage(),
+                "BAD_REQUEST",
+                webRequest.getDescription(false),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorDetails> handleException (ResourceNotFoundException exception,
